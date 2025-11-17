@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jmeter-worker
+  namespace: perf-test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jmeter-worker
+  template:
+    metadata:
+      labels:
+        app: jmeter-worker
+    spec:
+      containers:
+        - name: jmeter-worker
+          image: <your-registry>/jmeter-worker:latest
+          args: ["-s"]
+          ports:
+            - containerPort: 60000
+            - containerPort: 1099

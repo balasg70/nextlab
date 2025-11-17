@@ -1,0 +1,54 @@
+{
+  "title": "JMeter - Basic Overview",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Active Threads",
+      "targets": [
+        {
+          "expr": "jmeter_active_threads",
+          "legendFormat": "threads"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "type": "timeseries",
+      "title": "Response Time (p50/p95)",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.5, sum(rate(jmeter_sample_duration_bucket[1m])) by (le))",
+          "legendFormat": "p50"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(jmeter_sample_duration_bucket[1m])) by (le))",
+          "legendFormat": "p95"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "type": "timeseries",
+      "title": "Throughput (req/s)",
+      "targets": [
+        {
+          "expr": "sum(rate(jmeter_samples_total[1m]))",
+          "legendFormat": "req/s"
+        }
+      ],
+      "id": 3
+    },
+    {
+      "type": "timeseries",
+      "title": "Error rate (%)",
+      "targets": [
+        {
+          "expr": "100 * (sum(rate(jmeter_failures_total[1m])) / sum(rate(jmeter_samples_total[1m])))",
+          "legendFormat": "error%"
+        }
+      ],
+      "id": 4
+    }
+  ],
+  "schemaVersion": 16
+}

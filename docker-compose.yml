@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+      POSTGRES_DB: contactdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+
+  spring-api:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/contactdb
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppass
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+
+  jmeter-master:
+    build:
+      context: ./jmeter
+      dockerfile: Dockerfile.master
+    container_name: jmeter-master
+    volumes:
+      - ./jmeter/test-plans:/tests
+      - ./jmeter/results:/results
+    depends_on:
+      - spring-api
+    ports:
+      - "60000:60000"
+      - "9270:9270" # Prometheus metrics endpoint from Prometheus listener
+
+  jmeter-slave:
+    build:
+      context: ./jmeter
+      dockerfile: Dockerfile.slave
+    container_name: jmeter-slave
+    volumes:
+      - ./jmeter/test-plans:/tests
+    depends_on:
+      - jmeter-master
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      - jmeter-master
+
+  grafana:
+    image: grafana/grafana:9.5.0
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  pgdata:
+  grafana-data:

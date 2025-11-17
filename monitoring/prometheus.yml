@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: 'jmeter'
+    static_configs:
+      - targets: ['jmeter-master:9270','jmeter-slave:9270']
+  - job_name: 'spring-app'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['spring-api:8080']
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

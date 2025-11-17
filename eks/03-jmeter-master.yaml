@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jmeter-master
+  namespace: perf-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jmeter-master
+  template:
+    metadata:
+      labels:
+        app: jmeter-master
+    spec:
+      serviceAccountName: jmeter-sa
+      containers:
+        - name: jmeter-master
+          image: <your-registry>/jmeter-master:latest
+          args: ["-n","-t","/plans/contactform-test.jmx"]
+          ports:
+            - containerPort: 9270
+            - containerPort: 60000
+          volumeMounts:
+            - name: plans
+              mountPath: /plans
+      volumes:
+        - name: plans
+          emptyDir: {}
