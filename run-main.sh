@@ -50,4 +50,5 @@ echo ""
 echo "To stop everything:"
 echo "  docker-compose down -v"
 echo ""
-echo "🎉 Setup complete!"
+echo "Setup complete!"
+
