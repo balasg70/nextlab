@@ -1,4 +1,4 @@
-# Build your Spring Boot app elsewhere (mvn package) and copy jar into app/target or use automated build
+# Build your Spring Boot app
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY target/spring-crud-docker.jar /app/app.jar
