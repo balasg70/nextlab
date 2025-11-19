@@ -3,6 +3,11 @@ set -e
 
 CLUSTER=nextlabs-perf
 REGION=ap-southeast-1
+ARCH=amd64
+PLATFORM=$(uname -s)_$ARCH
+
+curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
 
 echo "==============================================="
 echo " Creating EKS cluster ($CLUSTER)"
@@ -55,3 +60,4 @@ echo " Deployment completed!"
 echo ""
 echo "Grafana URL (from LoadBalancer):"
 kubectl get svc grafana -n perf-test
+
