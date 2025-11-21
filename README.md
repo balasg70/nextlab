@@ -6,6 +6,8 @@ This repository contains a complete runnable local Docker Compose stack and Kube
 - Export JMeter metrics via Prometheus plugin and visualize in Grafana
 - EKS manifests include IRSA ServiceAccount example for JMeter to pull test plans from S3
 
+## Requirementto to have docker and docker compsed loaded in a Host to do demo
+
 ## Quick local run (Docker Compose)
 
 1. Clone Spring app (if not present) and build jar:
