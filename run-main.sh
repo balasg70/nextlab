@@ -16,7 +16,7 @@ rm -rf /tmp/spring-crud-docker
 echo "Cloning Spring Boot GitHub repository..."
 git clone https://github.com/Clifftech123/spring-crud-docker /tmp/spring-crud-docker
 
-echo "[3/8] Building Spring Boot application with Maven..."
+echo "Building Spring Boot application with Maven..."
 cd /tmp/spring-crud-docker
 ./mvnw clean package -DskipTests
 
@@ -51,5 +51,6 @@ echo "To stop everything:"
 echo "  docker-compose down -v"
 echo ""
 echo "Setup complete!"
+
 
 
