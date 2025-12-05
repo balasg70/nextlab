@@ -14,18 +14,18 @@ rm -f "$TARGET_JAR"
 rm -rf /tmp/spring-crud-docker
 
 echo "Cloning Spring Boot GitHub repository..."
-git clone https://github.com/Clifftech123/spring-crud-docker /tmp/spring-crud-docker
+git clone https://github.com/Clifftech123/spring-crud-docker /opt/spring-crud-docker
 
 echo "Building Spring Boot application with Maven..."
-cd /tmp/spring-crud-docker
-./mvnw clean package -DskipTests
+cd /opt/spring-crud-docker
+./mvn clean package -DskipTests
 
 echo "Copying built JAR into docker-compose/app directory..."
 cp target/*.jar "$TARGET_JAR"
 
 echo "Returning to project root..."
-#cd "$PROJECT_ROOT"
-cd /tmp/nextlab
+cd "$PROJECT_ROOT"
+#cd /tmp/nextlab
 
 echo "Building Docker images..."
 docker-compose build
